@@ -15,6 +15,16 @@ score; a hit here is a correctness failure, not a style issue.
 - A test that mocks the tools registry must call `assertSupportedJsonSchema` on
   every captured `output.schema`, or it can pass an unmountable plugin.
 
+## Run the bundled checker
+
+```bash
+node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <dsh-checkout>
+```
+
+`--json` returns a machine-readable report. Exit 1 means: mount failed, an
+`output.schema` was rejected, `parameters` was not raw JSON Schema,
+`render`/`execute` was missing, or no tool was registered.
+
 ## Failure this catches
 
 A skill-guided P2 candidate used `value: { type: 'json' }` inside
