@@ -340,6 +340,17 @@ paired 行：`new_score` 栏记 vote 比数（如 `3-0 better`），`note` 记�
 - 工作流硬编码 runtime-specific 工具且无 fallback → 给出通用替代方案或标注「仅在某 runtime 可用」
 - 例外：skill 名明确标注单 runtime（如 `xxx-codex`）的，可跳过本项
 
+### P0: DSH 插件 schema 边界（固定检查，先于评分）
+
+插件类 skill 先查这四条；命中任一，先修再进 9 维评分：
+
+- `ctx.tools.register()` 的 `parameters` 与 `output.schema` 都是**原始 JSON Schema**。
+- `defineTool` 的 shorthand 与 `type: 'json'` 只在该 DSL 内编译；`register()` 不编译。
+- `output.schema` 出现 `type: 'json'` 会在注册时抛错；无约束 JSON 用 `{}`。
+- mock tools registry 必须校验捕获的 `output.schema`，否则测试会放过挂不上的插件。
+
+静态 `validate_plugin.mjs` 只查包/导出/版本结构，不查工具 schema 的运行时可挂载性；必须另跑 mount/schema 检查。详见 [references/dsh-plugin-schema-boundary.md](references/dsh-plugin-schema-boundary.md)。
+
 ### P0: 效果问题（实测发现的）
 - 测试输出偏离用户意图 → 检查skill是否有误导性指令
 - 带skill比不带还差 → skill可能过度约束，考虑精简
