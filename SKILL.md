@@ -7,14 +7,38 @@ upstream: https://github.com/alchaincyf/darwin-skill
 
 # Darwin Skill 2.0 · DSH Port
 
-> **DSH port** — based on [alchaincyf/darwin-skill](https://github.com/alchaincyf/darwin-skill) v2.1 (MIT). Modified for DeepSeek Harness: `~/.dsh/skills` paths, `subagent` judges, usage-based ordering, Windows-friendly result cards. Upstream is a reference, not an auto-pull source; this repository is the DSH source of truth.
->
+## 功能介绍
+
+- **9 维评分**：结构 + 效果 + meta-skill 三维度，总分 100，对真实质量而非字数敏感。
+- **Paired 独立评委**：N=3 个独立 judge 在同一次调用内比较改前/改后，奇数多数决 keep/revert；绝对分只做 triage，避免 ±8 的 judge 噪音造成 false-revert。
+- **Git 棘轮**：只有 keep 才提交；revert 用 `git revert` 生成反向 commit，保留可追溯链，不用 `reset --hard`。
+- **DSH 专属**：按 `~/.dsh/sessions` / `usage.json` 的真实调用量排序；内置 P0 工具 schema 检查（`scripts/check-tool-schema.mjs`）和 CI。
+- **Human in the loop**：基线评估、单维度优化、回归测试三个检查点强制人审，不把最终判断交给自动评分。
+
+## 安装
+
+```bash
+# Linux/macOS
+git clone https://github.com/chaoguang668/dsh-skill-ratchet ~/.dsh/skills/darwin-skill
+
+# Windows PowerShell
+git clone https://github.com/chaoguang668/dsh-skill-ratchet "$env:USERPROFILE\.dsh\skills\darwin-skill"
+```
+
+安装后在会话里说「优化所有 skills」或「优化某个 skill」。先跑
+`node scripts/scan-usage.mjs --sessions ~/.dsh/sessions` 可按真实调用量排序。
+
+## 来源与借鉴
+
+- **上游**：[alchaincyf/darwin-skill](https://github.com/alchaincyf/darwin-skill) v2.1（MIT）。本仓库是 DSH 移植版，上游只作参考，不自动 `git pull`。
+- **SkillLens**（[arXiv 2605.23899](https://arxiv.org/abs/2605.23899)）：9 维 rubric、失败模式编码、可执行具体性、高风险行动黑名单的实证依据。
+- **SkillOpt**（[arXiv 2605.23904](https://arxiv.org/abs/2605.23904)）：validation-gated edits、多评委、早停与干跑比例控制。
+- **autoresearch**（[karpathy/autoresearch](https://github.com/karpathy/autoresearch)）：原始自主实验循环与 git ratchet 的灵感来源。
+
 > **v2.1 · 2026-06-10** — keep/revert 棘轮从「绝对分数 delta」改为「**paired 同-judge 比较 + 奇数 N 多数决**」（绝对分数 ±8 judge 噪音淹没保守编辑的真实增益、是 false-revert 源；within-judge 比较消除换尺污染）。绝对分数降级为 triage-only。
 > **v2.0 · 2026-05-28** — 吸收 Microsoft Research SkillLens（arXiv 2605.23899）的 9 维评分药方 + SkillOpt（arXiv 2605.23904）的 validation-gated 验证机制 + human in the loop 三层守关。
 >
-> 借鉴 Karpathy autoresearch 的自主实验循环，对 skills 进行持续优化。
 > 核心理念：**评估 → 改进 → 实测验证 → 人类确认 → 保留或回滚 → 生成成果卡片**
-> Upstream: https://github.com/alchaincyf/darwin-skill
 
 ---
 

@@ -21,6 +21,16 @@ Inspired by [Karpathy's autoresearch](https://github.com/karpathy/autoresearch).
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Compatible-blueviolet)](https://skills.sh)
 [![Microsoft SkillOpt](https://img.shields.io/badge/Microsoft_SkillOpt-Listed_Integration-0078D4?logo=microsoft&logoColor=white)](https://github.com/microsoft/SkillOpt)
 
+## Features
+
+- **9-dimension rubric**: structure + effectiveness + meta-skill, scored out of 100.
+- **Paired independent judges**: N=3 judges compare before/after in one call; odd-majority keep/revert. Absolute scores are triage only.
+- **Git ratchet**: only keeps commit; reverts use `git revert` to preserve a traceable chain.
+- **DSH-specific**: orders skills by real usage from `~/.dsh/sessions` / `usage.json`; includes a P0 tool-schema checker and GitHub Actions.
+- **Human in the loop**: baseline, per-dimension optimization, and regression checks all require human review.
+
+## Install
+
 ```bash
 # Linux/macOS
 git clone https://github.com/chaoguang668/dsh-skill-ratchet ~/.dsh/skills/darwin-skill
@@ -40,6 +50,14 @@ git clone https://github.com/chaoguang668/dsh-skill-ratchet "$env:USERPROFILE\.d
 > We absorbed its validation-gated framework; it added darwin to its integration list. A two-way nod. 👉 [Visit the SkillOpt repo](https://github.com/microsoft/SkillOpt)
 
 ---
+
+## Sources & Credits
+
+- **Upstream**: [alchaincyf/darwin-skill](https://github.com/alchaincyf/darwin-skill) v2.1 (MIT). This repository is the DSH port; upstream is a reference, not an auto-pull source.
+- **SkillLens** ([arXiv 2605.23899](https://arxiv.org/abs/2605.23899)): empirical basis for the 9-dimension rubric, failure-mechanism encoding, actionable specificity, and the high-risk action blacklist.
+- **SkillOpt** ([arXiv 2605.23904](https://arxiv.org/abs/2605.23904)): validation-gated edits, multiple judges, early stopping, and dry-run ratio control.
+- **autoresearch** ([karpathy/autoresearch](https://github.com/karpathy/autoresearch)): original autonomous experiment loop and git-ratchet inspiration.
+- Detailed references and author credits are at the end.
 
 ## What's New in 2.0
 

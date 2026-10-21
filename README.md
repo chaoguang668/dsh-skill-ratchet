@@ -27,6 +27,16 @@
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Compatible-blueviolet)](https://skills.sh)
 [![Microsoft SkillOpt](https://img.shields.io/badge/Microsoft_SkillOpt-Listed_Integration-0078D4?logo=microsoft&logoColor=white)](https://github.com/microsoft/SkillOpt)
 
+## 功能介绍
+
+- **9 维评分**：结构 + 效果 + meta-skill 三维度，总分 100。
+- **Paired 独立评委**：N=3 个独立 judge 在同一次调用内比较改前/改后，奇数多数决 keep/revert；绝对分只做 triage。
+- **Git 棘轮**：keep 才提交；revert 用 `git revert` 生成反向 commit，保留可追溯链。
+- **DSH 专属**：按 `~/.dsh/sessions` / `usage.json` 的真实调用量排序；内置 P0 工具 schema 检查器与 GitHub Actions。
+- **Human in the loop**：基线评估、单维度优化、回归测试三个检查点强制人审。
+
+## 安装
+
 ```bash
 # Linux/macOS
 git clone https://github.com/chaoguang668/dsh-skill-ratchet ~/.dsh/skills/darwin-skill
@@ -46,6 +56,14 @@ git clone https://github.com/chaoguang668/dsh-skill-ratchet "$env:USERPROFILE\.d
 > 我们吸收了它的 validation-gated 框架，它把达尔文写进了自己的集成名单。这是一次双向的致意。👉 [去 SkillOpt 仓库看看](https://github.com/microsoft/SkillOpt)
 
 ---
+
+## 来源与借鉴
+
+- **上游**：[alchaincyf/darwin-skill](https://github.com/alchaincyf/darwin-skill) v2.1（MIT）；本仓库是 DSH 移植版，上游只作参考，不自动 `git pull`。
+- **SkillLens**（[arXiv 2605.23899](https://arxiv.org/abs/2605.23899)）：9 维 rubric、失败模式编码、可执行具体性、高风险行动黑名单的实证依据。
+- **SkillOpt**（[arXiv 2605.23904](https://arxiv.org/abs/2605.23904)）：validation-gated edits、多评委、早停与干跑比例控制。
+- **autoresearch**（[karpathy/autoresearch](https://github.com/karpathy/autoresearch)）：原始自主实验循环与 git ratchet 的灵感来源。
+- 详细引用与作者信息见文末 [References & Credits](#references--credits)。
 
 ## What's New in 2.0
 
