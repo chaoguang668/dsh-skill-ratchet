@@ -9,9 +9,12 @@
  *
  * Usage:
  *   node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <path> [--json]
+ *   node scripts/check-tool-schema.mjs <plugin-dir> \
+ *     --json-schema-lib <path> --cordis-lib <path> [--json]
  *
  * `--dsh-checkout` may be omitted when DSH_CHECKOUT is set or the current
- * directory is a DSH checkout containing packages/core/tools.
+ * directory is a DSH checkout containing packages/core/tools. For an installed
+ * package, pass --json-schema-lib and --cordis-lib directly.
  */
 import { existsSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -22,7 +25,8 @@ function arg(name) {
   const index = argv.indexOf(name)
   return index >= 0 ? argv[index + 1] : undefined
 }
-const pluginArg = argv.find(value => !value.startsWith('--') && value !== arg('--dsh-checkout'))
+const flagValues = new Set([arg('--dsh-checkout'), arg('--json-schema-lib'), arg('--cordis-lib')])
+const pluginArg = argv.find(value => !value.startsWith('--') && !flagValues.has(value))
 if (!pluginArg) {
   console.error('usage: node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <path> [--json]')
   process.exit(2)
@@ -31,9 +35,11 @@ const pluginDir = resolve(pluginArg)
 const checkout = resolve(arg('--dsh-checkout') ?? process.env.DSH_CHECKOUT ?? process.cwd())
 const asJson = argv.includes('--json')
 
-const jsonSchemaPath = join(checkout, 'packages', 'core', 'tools', 'lib', 'types', 'json-schema.js')
+const jsonSchemaPath = arg('--json-schema-lib')
+  ? resolve(arg('--json-schema-lib'))
+  : join(checkout, 'packages', 'core', 'tools', 'lib', 'types', 'json-schema.js')
 if (!existsSync(jsonSchemaPath)) {
-  console.error(`missing ${jsonSchemaPath}; build the checkout or pass --dsh-checkout`)
+  console.error(`missing ${jsonSchemaPath}; build the checkout or pass --json-schema-lib`)
   process.exit(2)
 }
 const { assertSupportedJsonSchema } = await import(pathToFileURL(jsonSchemaPath).href)
@@ -107,7 +113,9 @@ try {
   if (typeof module.apply === 'function') {
     await module.apply(makeMockContext(), {})
   } else if (typeof module.default === 'function' && module.default.prototype) {
-    const cordisPath = join(checkout, 'vendor', 'cordis', 'lib', 'index.js')
+    const cordisPath = arg('--cordis-lib')
+      ? resolve(arg('--cordis-lib'))
+      : join(checkout, 'vendor', 'cordis', 'lib', 'index.js')
     if (!existsSync(cordisPath)) throw new Error(`missing ${cordisPath}`)
     const { Context } = await import(pathToFileURL(cordisPath).href)
     const ctx = new Context()

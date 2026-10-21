@@ -1,0 +1,4 @@
+# CI fixture: type:json in output.schema (must fail).
+- insert:
+    - id: dsh-ci-bad-output-fixture
+      name: dsh-ci-bad-output-fixture

@@ -1,0 +1,4 @@
+# CI fixture: shorthand parameters at raw register (must fail).
+- insert:
+    - id: dsh-ci-shorthand-fixture
+      name: dsh-ci-shorthand-fixture

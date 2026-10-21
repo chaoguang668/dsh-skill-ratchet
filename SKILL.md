@@ -349,7 +349,7 @@ paired 行：`new_score` 栏记 vote 比数（如 `3-0 better`），`note` 记�
 - `output.schema` 出现 `type: 'json'` 会在注册时抛错；无约束 JSON 用 `{}`。
 - mock tools registry 必须校验捕获的 `output.schema`，否则测试会放过挂不上的插件。
 
-检查命令：`node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <dsh-checkout>`（`--json` 输出机器可读结果）。静态 `validate_plugin.mjs` 只查包/导出/版本结构，不查工具 schema 的运行时可挂载性；必须另跑这个 mount/schema 检查。详见 [references/dsh-plugin-schema-boundary.md](references/dsh-plugin-schema-boundary.md)。
+检查命令：`node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <dsh-checkout>`（已安装包可用 `--json-schema-lib` / `--cordis-lib`；`--json` 输出机器可读结果）。静态 `validate_plugin.mjs` 只查包/导出/版本结构，不查工具 schema 的运行时可挂载性；必须另跑这个 mount/schema 检查。详见 [references/dsh-plugin-schema-boundary.md](references/dsh-plugin-schema-boundary.md)。
 
 ### P0: 效果问题（实测发现的）
 - 测试输出偏离用户意图 → 检查skill是否有误导性指令

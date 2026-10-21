@@ -25,6 +25,14 @@ node scripts/check-tool-schema.mjs <plugin-dir> --dsh-checkout <dsh-checkout>
 `output.schema` was rejected, `parameters` was not raw JSON Schema,
 `render`/`execute` was missing, or no tool was registered.
 
+For an installed DSH package, bypass the checkout layout:
+
+```bash
+node scripts/check-tool-schema.mjs <plugin-dir> \
+  --json-schema-lib node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js \
+  --cordis-lib node_modules/@deepseek-ai/cordis/lib/index.js
+```
+
 ## Failure this catches
 
 A skill-guided P2 candidate used `value: { type: 'json' }` inside

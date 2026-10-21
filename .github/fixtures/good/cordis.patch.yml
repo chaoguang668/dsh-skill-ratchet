@@ -1,0 +1,4 @@
+# CI fixture: good raw JSON Schema.
+- insert:
+    - id: dsh-ci-good-fixture
+      name: dsh-ci-good-fixture

@@ -1,0 +1,56 @@
+name: P0 tool-schema check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p0-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install DSH schema libraries
+        run: |
+          mkdir -p .ci-deps
+          cd .ci-deps
+          npm init -y >/dev/null
+          npm install --no-save \
+            @deepseek-ai/dsh-tools@0.2.1-alpha.2 \
+            @deepseek-ai/cordis@4.0.5-alpha.1
+
+      - name: Syntax check
+        run: node --check scripts/check-tool-schema.mjs
+
+      - name: Good fixture must pass
+        run: |
+          node scripts/check-tool-schema.mjs .github/fixtures/good \
+            --json-schema-lib .ci-deps/node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js \
+            --cordis-lib .ci-deps/node_modules/@deepseek-ai/cordis/lib/index.js
+
+      - name: Shorthand parameters must fail
+        run: |
+          if node scripts/check-tool-schema.mjs .github/fixtures/shorthand \
+            --json-schema-lib .ci-deps/node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js \
+            --cordis-lib .ci-deps/node_modules/@deepseek-ai/cordis/lib/index.js; then
+            echo "expected the shorthand fixture to fail"
+            exit 1
+          fi
+
+      - name: type:json output must fail
+        run: |
+          if node scripts/check-tool-schema.mjs .github/fixtures/bad-output \
+            --json-schema-lib .ci-deps/node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js \
+            --cordis-lib .ci-deps/node_modules/@deepseek-ai/cordis/lib/index.js; then
+            echo "expected the bad-output fixture to fail"
+            exit 1
+          fi
