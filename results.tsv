@@ -1,0 +1,2 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-10-21T12:24	baseline	deepseek-harness-plugin-creator	-	80.0	baseline	-	dry-run 9-dim; dim8=7/10 simulated; weighted gaps: dim8 6.9, dim4/dim3/dim2 2.4	dry_run

@@ -1,0 +1,16 @@
+DSH Skill Ratchet
+=================
+
+This repository is a DSH (DeepSeek Harness) port of Darwin Skill 2.1.
+
+Upstream: https://github.com/alchaincyf/darwin-skill
+Copyright (c) 2026 alchaincyf (花叔)
+License: MIT (see LICENSE)
+
+Modifications for DeepSeek Harness:
+
+- skills live under `~/.dsh/skills` and `<project>/.agents/skills`
+- independent judges use the DSH `subagent` tool
+- usage-based ordering via `scripts/scan-usage.mjs`
+- optional, Windows-friendly result cards
+- upstream is a reference; this repository is the source of truth
